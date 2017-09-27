@@ -1,3 +1,3 @@
 export enum MouseState {
-    None, Scrolling
+    None, Scrolling, Drawing
 }

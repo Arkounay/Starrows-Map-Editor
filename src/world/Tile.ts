@@ -1,19 +1,12 @@
 export abstract class Tile {
-    static readonly SIZE = 32;
+    static readonly SIZE = 24;
 
-    private _x: number;
-    private _y: number;
+    public x: number;
+    public y: number;
 
     constructor(x: number, y: number) {
-        this._x = x;
-        this._y = y;
+        this.x = x;
+        this.y = y;
     }
 
-    get x(): number {
-        return this._x;
-    }
-
-    get y(): number {
-        return this._y;
-    }
 }

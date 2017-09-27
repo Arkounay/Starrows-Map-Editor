@@ -1,6 +1,9 @@
 import {Layer} from "./Layer";
 import {Tile} from "./Tile";
 import {Grid} from "./Grid";
+import {Tileset} from "../editor/tileset/Tileset";
+import {TilesetFamily} from "../editor/tileset/TilesetFamily";
+import Vector from "../math/Vector";
 
 export class World {
     private _width: number;
@@ -11,7 +14,7 @@ export class World {
     constructor(width: number, height: number) {
         this._width = width;
         this._height = height;
-        this.layers.push(new Layer());
+        this.layers.push(new Layer(width, height));
         this._grid = new Grid(width, height);
     }
 
@@ -20,6 +23,12 @@ export class World {
     }
 
     public draw(ctx: CanvasRenderingContext2D) {
+
+        this.layers[0].draw(ctx);
+
+        let tileset = new Tileset('assets/tilesets/tileset.png');
+        tileset.drawTile(ctx, 16, 3, 5, 5);
+        tileset.drawTile(ctx, 16, 4, 5, 6);
 
         this.grid.map(function(tile, x, y){
             if (tile.isSelected) {
@@ -39,8 +48,18 @@ export class World {
             ctx.lineTo(tile.x + Tile.SIZE, tile.y + Tile.SIZE);
             ctx.lineTo(tile.x, tile.y + Tile.SIZE);
             ctx.stroke();
+
         });
 
+    }
+
+
+    get width(): number {
+        return this._width;
+    }
+
+    get height(): number {
+        return this._height;
     }
 
     get grid(): Grid {
