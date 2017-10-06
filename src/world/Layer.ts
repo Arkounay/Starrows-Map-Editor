@@ -21,7 +21,7 @@ export class Layer {
     }
 
     public addTile(tileX: number, tileY: number, tile: TileRenderable): void {
-        let tileToAdd = new TileRenderable(tile.x, tile.y, tile.type);
+        let tileToAdd = new TileRenderable(tile.tilesetX, tile.tilesetY, tile.type);
         tileToAdd.x = tileX * Tile.SIZE;
         tileToAdd.y = tileY * Tile.SIZE;
         this.tiles[tileX][tileY] = tileToAdd;
@@ -33,7 +33,7 @@ export class Layer {
         });
     }
 
-    private map(callback: (tile: TileRenderable, x: number, y: number) => void) {
+    public map(callback: (tile: TileRenderable, x: number, y: number) => void) {
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
                 if (this.tiles[x][y] !== null) {
@@ -41,6 +41,13 @@ export class Layer {
                 }
             }
         }
+    }
+
+    public getTile(x: number, y:number): TileRenderable {
+        if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
+            return this.tiles[x][y];
+        }
+        return null;
     }
 
 }

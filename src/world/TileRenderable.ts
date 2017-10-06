@@ -4,8 +4,8 @@ import {Tileset} from "../editor/tileset/Tileset";
 
 export class TileRenderable extends Tile {
     public type: TileType;
-    private tilesetX: number;
-    private tilesetY: number;
+    public readonly tilesetX: number;
+    public readonly tilesetY: number;
 
     constructor(tilesetX: number, tilesetY: number, type: TileType) {
         super(0, 0);

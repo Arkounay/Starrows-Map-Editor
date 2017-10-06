@@ -11,6 +11,7 @@ export class Cursor {
     public readonly position = new Vector();
     public readonly worldPosition = new Vector();
     public state = MouseState.None;
+    private lastTilePosition = new Vector();
 
     addEvents(world: World, canvas: HTMLCanvasElement, camera: Camera): void {
         canvas.addEventListener('mousedown', (e) => {
@@ -59,13 +60,7 @@ export class Cursor {
 
             switch (this.state) {
                 case MouseState.None:
-                    if (tileX >= 0 && tileX < world.grid.width && tileY >= 0 && tileY < world.grid.height) {
-                        let tile = world.grid.tiles[tileX][tileY];
-                        world.grid.map(function (tile) {
-                            tile.isSelected = false;
-                        });
-                        tile.isSelected = true;
-                    }
+                    Cursor.updateSelectedTile(tileX, tileY, world);
                     break;
 
                 case MouseState.Scrolling:
@@ -73,7 +68,10 @@ export class Cursor {
                     break;
 
                 case MouseState.Drawing:
-                    if (tileX >= 0 && tileX < world.grid.width && tileY >= 0 && tileY < world.grid.height) {
+                    Cursor.updateSelectedTile(tileX, tileY, world);
+                    let isNewTile = tileX !== this.lastTilePosition.x || tileY !== this.lastTilePosition.y;
+                    this.lastTilePosition.set(tileX, tileY);
+                    if (isNewTile && tileX >= 0 && tileX < world.grid.width && tileY >= 0 && tileY < world.grid.height) {
                         editor.addTile(tileX, tileY);
                     }
                     break;
@@ -84,4 +82,13 @@ export class Cursor {
 
     }
 
+    private static updateSelectedTile(tileX: number, tileY: number, world: World) {
+        if (tileX >= 0 && tileX < world.grid.width && tileY >= 0 && tileY < world.grid.height) {
+            let tile = world.grid.tiles[tileX][tileY];
+            world.grid.map(function (tile) {
+                tile.isSelected = false;
+            });
+            tile.isSelected = true;
+        }
+    }
 }
