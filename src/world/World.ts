@@ -25,12 +25,20 @@ export class World {
     public draw(ctx: CanvasRenderingContext2D) {
 
         this.layers[0].draw(ctx);
+        ctx.setLineDash([3, 3]);
+        ctx.strokeStyle = 'rgba(0, 0, 0, .75)';
+        ctx.beginPath();
+        for (let i = 0; i <= this.grid.height * Tile.SIZE; i+= Tile.SIZE) {
+            ctx.moveTo(0, i);
+            ctx.lineTo(this.grid.width * Tile.SIZE, i);
+        }
+        for (let i = 0; i <= this.grid.width * Tile.SIZE; i+= Tile.SIZE) {
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, this.grid.height * Tile.SIZE);
+        }
+        ctx.stroke();
 
-        let tileset = new Tileset('assets/tilesets/tileset.png');
-        tileset.drawTile(ctx, 16, 3, 5, 5);
-        tileset.drawTile(ctx, 16, 4, 5, 6);
-
-        this.grid.map(function(tile, x, y){
+        this.grid.map(function(tile){
             if (tile.isSelected) {
                 ctx.beginPath();
                 ctx.fillStyle = 'rgba(0, 0, 255, .15)';
@@ -38,17 +46,6 @@ export class World {
                 ctx.fillRect(tile.x, tile.y, Tile.SIZE, Tile.SIZE);
                 ctx.stroke();
             }
-
-            ctx.fillStyle="#000000";
-            // grid
-            ctx.beginPath();
-            ctx.setLineDash([3, 5]);
-            ctx.moveTo(tile.x, tile.y);
-            ctx.lineTo(tile.x + Tile.SIZE, tile.y);
-            ctx.lineTo(tile.x + Tile.SIZE, tile.y + Tile.SIZE);
-            ctx.lineTo(tile.x, tile.y + Tile.SIZE);
-            ctx.stroke();
-
         });
 
     }
